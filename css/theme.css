@@ -1,0 +1,19 @@
+/* theme.css */
+body{
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: radial-gradient(circle at 30% 20%, #1a0033, #000010 70%);
+  color: #e5e7eb;
+}
+
+/* slow page transitions */
+.page{
+  animation: fadeIn .45s ease-out;
+}
+.fade-out{
+  animation: fadeOut .35s ease-in forwards;
+}
+@keyframes fadeIn { from{opacity:0; transform: translateY(10px);} to{opacity:1; transform: translateY(0);} }
+@keyframes fadeOut { from{opacity:1;} to{opacity:0; transform: translateY(10px);} }
+
+a{ color: inherit; }

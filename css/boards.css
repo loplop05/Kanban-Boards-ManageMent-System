@@ -1,0 +1,105 @@
+/* boards.css */
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 14px 22px;
+  background: rgba(34,37,44,.92);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.brand{ color:#fff; font-weight:900; letter-spacing:.4px; }
+
+.right{ display:flex; gap:10px; }
+
+.wrap{
+  width: min(1200px, calc(100% - 32px));
+  margin: 22px auto;
+}
+
+.card{
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.45);
+  margin-bottom: 14px;
+}
+
+h1{ margin:0 0 6px; color:#fff; }
+.muted{ color: rgba(227,230,238,.85); }
+
+.btn{
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  cursor: pointer;
+}
+.btn:hover{ filter: brightness(1.08); }
+
+.btn-primary{
+  background: #60A5FA;
+  border: none;
+  color: #0b1220;
+  font-weight: 900;
+}
+.danger{
+  background: rgba(239,68,68,.18);
+  border: 1px solid rgba(239,68,68,.35);
+}
+
+/* board layout */
+.board{
+  display:flex;
+  gap: 14px;
+  align-items:flex-start;
+  overflow:auto;
+  padding-bottom: 10px;
+}
+
+.column{
+  width: 300px;
+  min-height: 320px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  padding: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+  animation: pop .35s ease-out;
+}
+
+@keyframes pop { from{opacity:0; transform: translateY(10px);} to{opacity:1; transform: translateY(0);} }
+
+.column h2{
+  margin: 0 0 10px;
+  color:#fff;
+  font-size: 18px;
+  text-align:center;
+}
+
+/* cards */
+.task{
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 14px;
+  padding: 10px;
+  margin: 10px 0;
+  cursor: grab;
+  transition: transform .18s ease, filter .18s ease;
+  animation: cardIn .25s ease-out;
+}
+
+@keyframes cardIn { from{opacity:0; transform: scale(.96);} to{opacity:1; transform: scale(1);} }
+
+.task:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.07);
+}
+
+.drag-over{
+  outline: 2px dashed rgba(96,165,250,.7);
+  outline-offset: 6px;
+}

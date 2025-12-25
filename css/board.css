@@ -1,0 +1,92 @@
+/* board.css */
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 14px 22px;
+  background: rgba(34,37,44,.92);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.brand a{ color:#fff; font-weight:800; }
+
+.wrap{
+  width: min(1100px, calc(100% - 32px));
+  margin: 24px auto;
+}
+
+.card{
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.45);
+  margin-bottom: 16px;
+}
+
+h1,h2{ margin: 0 0 10px; color:#fff; }
+.muted{ color: rgba(227,230,238,.85); }
+
+.btn{
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+input{
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  outline: none;
+  width: 260px;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.lists{
+  display:flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.listBox{
+  width: 300px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+}
+
+.cardItem{
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  padding: 10px;
+  margin-top: 10px;
+  background: rgba(0,0,0,.18);
+}
+
+.small{
+  font-size: 13px;
+  color: rgba(227,230,238,.85);
+}
+
+select{
+  padding: 8px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.14);
+}

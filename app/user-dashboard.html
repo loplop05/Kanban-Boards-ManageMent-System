@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/user-dashboard.css">
+</head>
+<body class="page">
+
+<div class="topbar">
+  <div class="brand">NeoBoard (User)</div>
+  <button id="logoutBtn" class="btn">Logout</button>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <h1 id="welcomeMsg">Welcome</h1>
+    <p class="muted" id="loginInfo">Login time:</p>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Your Boards</h2>
+      <p class="muted">Click Open to enter your board.</p>
+      <ul id="boardsList" class="list"></ul>
+    </div>
+
+    <div class="card">
+      <h2>Quick Actions</h2>
+      <p class="muted">Simple actions.</p>
+      <button id="openFirstBtn" class="btn btn-primary">Open First Board</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/users.js"></script>
+<script src="/js/user-dashboard.js"></script>
+</body>
+</html>

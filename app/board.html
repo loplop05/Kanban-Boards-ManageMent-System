@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Board</title>
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/board.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><a href="boards.html">← Back</a></div>
+  <button id="logoutBtn" class="btn">Logout</button>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <h1 id="boardTitle">Board</h1>
+    <p class="muted" id="permInfo"></p>
+  </div>
+
+  <div class="card">
+    <h2>Lists (Columns)</h2>
+
+    <div class="row">
+      <input id="newListTitle" type="text" placeholder="New list title">
+      <button id="addListBtn" class="btn">Add List</button>
+    </div>
+
+    <div id="listsArea" class="lists"></div>
+  </div>
+</div>
+
+<script src="/js/users.js"></script>
+<script src="/js/board.js"></script>
+</body>
+</html>

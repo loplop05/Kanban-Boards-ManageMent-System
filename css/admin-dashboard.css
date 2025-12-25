@@ -1,0 +1,87 @@
+/* admin-dashboard.css (page theme 2 look) */
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 14px 22px;
+  background: rgba(34,37,44,.92);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.brand{
+  color:#fff;
+  font-weight:900;
+  letter-spacing:.4px;
+}
+
+.wrap{
+  width: min(1100px, calc(100% - 32px));
+  margin: 24px auto;
+}
+
+.card{
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.45);
+  margin-bottom: 16px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 16px;
+}
+
+@media (max-width: 900px){
+  .grid{ grid-template-columns: 1fr; }
+}
+
+h1,h2{ color:#fff; margin: 0 0 8px; }
+.muted{ color: rgba(227,230,238,.85); }
+
+.list{
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+.btn{
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  cursor: pointer;
+  margin-right: 8px;
+  margin-top: 10px;
+}
+
+.btn:hover{ filter: brightness(1.08); }
+
+.btn-primary{
+  background: #93C5FD;
+  border: none;
+  color: #0b1220;
+  font-weight: 900;
+}
+
+.select{
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  outline: none;
+}
+
+.miniCard{
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.05);
+}
