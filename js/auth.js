@@ -24,7 +24,7 @@ function requireLogin() {
   return u;
 }
 
-// simple slow page transition
+
 function enableTransitions() {
   document.body.classList.add("fade-in");
 

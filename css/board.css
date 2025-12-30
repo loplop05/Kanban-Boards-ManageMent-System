@@ -86,7 +86,7 @@ input{
 select{
   padding: 8px;
   border-radius: 10px;
-  background: rgba(255,255,255,.08);
+  background: rgba(211, 90, 90, 0.775);
   color: #fff;
   border: 1px solid rgba(255,255,255,.14);
 }
