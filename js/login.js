@@ -1,4 +1,3 @@
-// login.js
 
 (function () {
   const form = document.querySelector(".login-form");

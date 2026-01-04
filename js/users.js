@@ -22,7 +22,11 @@ function findUser(username, password) {
 }
 
 /* =========================
-   BOARDS + PERMISSIONS (localStorage)
+   BOARDS + PERMISSIONS -> its based on localStorage
+    - getBoards()
+    - getPerms()
+    - savePerms(permsObj)
+  
    ========================= */
 
 const DEFAULT_BOARDS = [
@@ -119,8 +123,11 @@ function getBoardPermActions(currentUser, boardId) {
 
   // if not allowed user => no actions
   let allowed = false;
+
   for (let i = 0; i < p.allowedUsers.length; i++) {
+
     if (p.allowedUsers[i] === currentUser.username) allowed = true;
+    
   }
   if (!allowed) return { addCard: false, addList: false, moveCard: false, deleteCard: false };
 

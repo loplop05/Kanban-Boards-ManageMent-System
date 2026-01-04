@@ -14,7 +14,7 @@ function requireLogin() {
   return JSON.parse(saved);
 }
 
-/* basic boards data (you can edit later) */
+/* basic boards data  */
 const BOARDS = [
   {
     id: 1,

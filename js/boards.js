@@ -20,7 +20,7 @@
 
   // access check
   if (!canUserAccessBoard(currentUser, boardId)) {
-    alert("You don't have access to this board ❌");
+    alert("You don't have access to this board !");
     window.location.href = (currentUser.role === "admin") ? "admin-dashboard.html" : "user-dashboard.html";
     return;
   }

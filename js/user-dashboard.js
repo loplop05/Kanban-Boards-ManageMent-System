@@ -1,4 +1,4 @@
-// user-dashboard.js
+
 
 (function () {
   const data = localStorage.getItem("currentUser");
@@ -9,7 +9,7 @@
 
   const user = JSON.parse(data);
 
-  // only users
+  // only users can open this page 
   if (user.role !== "user") {
     window.location.href = "admin-dashboard.html";
     return;
