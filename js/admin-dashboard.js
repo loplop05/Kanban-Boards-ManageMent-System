@@ -202,5 +202,6 @@
 
     // Go back to login page
     window.location.href = "login-page.html";
+      
   });
 })();
