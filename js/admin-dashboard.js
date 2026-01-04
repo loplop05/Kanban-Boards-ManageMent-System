@@ -101,7 +101,12 @@
 
       // Check the box if username exists in allowedUsers array
       cb.checked = allowedArr.indexOf(u.username) !== -1;
-
+      //   !==   It checks two things at the same time:
+            //Value
+            //Type
+            //If either the value OR the type is different, it returns true.  
+      //
+      //
       // Create label next to checkbox
       const label = document.createElement("label");
       label.htmlFor = cb.id;
