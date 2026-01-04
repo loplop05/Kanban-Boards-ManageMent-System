@@ -34,7 +34,7 @@ body{
 .main-nav{
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 5px;
   float: right;
 }
 
@@ -258,31 +258,6 @@ justify-content: center;
 
  }
 
-
- /*====Values+icons====*/
- .values{
-  margin-bottom: 40px;
- }
-
- .values-list{
-  display: flex;
-  gap: 18px;
-  padding: 0;
-  margin: 12px 0;
- }
-
- .values-item{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
- }
-
- .val_label{
-  color:rgba(227, 230 ,238, 0.75) ;
-  font-size: 14px;
- }
 
 
  /* Icon base */
