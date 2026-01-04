@@ -75,12 +75,12 @@
   // { addCard:true, addList:false, moveCard:true, deleteCard:false }
   const actions = getBoardPermActions(currentUser, boardId);
 
-  // Display permissions info in UI for debugging / clarity
+  // Display permissions info when the user loggs in 
   document.getElementById("permInfo").textContent =
-    "Permissions: addCard=" + actions.addCard +
-    ", addList=" + actions.addList +
-    ", moveCard=" + actions.moveCard +
-    ", deleteCard=" + actions.deleteCard;
+  `Permissions → Card: ${actions.addCard ? "✔" : "✖"} | 
+   List: ${actions.addList ? "✔" : "✖"} | 
+   Move: ${actions.moveCard ? "✔" : "✖"} | 
+   Delete: ${actions.deleteCard ? "✔" : "✖"}`;
 
   // ==============================
   // 6) ENABLE/DISABLE BUTTONS BASED ON PERMISSIONS
@@ -281,7 +281,7 @@
     // find card by id and remove it
     for (let i = 0; i < cards.length; i++) {
       if (cards[i].id === cardId) {
-        cards.splice(i, 1);
+        cards.splice(i, 1); // splice عشان نغير بالمصفوفة نفسها 
         break;
       }
     }
