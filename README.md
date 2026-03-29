@@ -23,4 +23,4 @@ Teams often want a simple Kanban tool but still need per-board guardrails. This 
 ## What’s inside
 - `app/` HTML pages for login, dashboards, and boards.
 - `js/` logic for authentication, permissions, and board interactions.
-- `css/` styling for the dashboards and Kanban experience.
+- `css/` Styling for the dashboards and Kanban experience.
