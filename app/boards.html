@@ -2,35 +2,364 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Board</title>
-  <link rel="stylesheet" href="/css/theme.css">
-  <link rel="stylesheet" href="/css/boards.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanban Dashboard - NeoBoard</title>
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1', // Indigo
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            dark: {
+              950: '#090d16', // Ultra dark background
+              900: '#0f172a', // Slate-900 card background
+              800: '#1e293b', // Slate-800 hover/dropdown
+              700: '#334155', // Borders
+              600: '#475569',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          boxShadow: {
+            'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+            'premium': '0 20px 40px -15px rgba(0, 0, 0, 0.7)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #090d16 75%);
+    }
+
+    /* Custom Scrollbar for columns and page */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.3);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.2);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(99, 102, 241, 0.4);
+    }
+
+    /* Sidebar transition */
+    #sidebar {
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Column active hover transitions */
+    .column-zone {
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    /* Card hover elevation */
+    .kanban-card {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .kanban-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    .kanban-card:active, .kanban-card.dragging {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(99, 102, 241, 0.7);
+    }
+
+    /* Modal slide transition */
+    #modalPanel {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #modalOverlay {
+      transition: opacity 0.3s ease;
+    }
+  </style>
 </head>
-<body class="page">
+<body class="text-slate-200 min-h-screen overflow-hidden flex">
 
-<div class="topbar">
-  <div class="brand" id="boardTitle">Board</div>
-  <div class="right">
-    <button id="backBtn" class="btn">Back</button>
-    <button id="logoutBtn" class="btn danger">Logout</button>
+  <!-- ==================================================== -->
+  <!-- SIDEBAR -->
+  <!-- ==================================================== -->
+  <aside id="sidebar" class="w-64 bg-dark-950/80 border-r border-dark-700/40 backdrop-blur-xl flex flex-col justify-between shrink-0 relative z-20">
+    <div class="flex flex-col overflow-y-auto flex-1">
+      
+      <!-- Brand & Toggle -->
+      <div class="h-16 flex items-center justify-between px-4 border-b border-dark-700/40 shrink-0">
+        <div class="flex items-center gap-3 overflow-hidden" id="sidebarBrand">
+          <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold shrink-0 shadow-lg shadow-brand-500/30">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          </div>
+          <span class="font-extrabold text-lg tracking-wider text-white select-none whitespace-nowrap">NEO<span class="text-brand-500">BOARD</span></span>
+        </div>
+        <button id="sidebarToggle" class="p-1.5 rounded-lg bg-dark-900/80 border border-dark-700/50 hover:bg-dark-800 text-slate-400 hover:text-white transition-all">
+          <i data-lucide="chevron-left" class="w-4 h-4 transition-transform duration-300" id="toggleIcon"></i>
+        </button>
+      </div>
+
+      <!-- Navigation -->
+      <div class="px-3 py-4 space-y-1.5">
+        <button id="backBtn" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">
+          <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          <span class="sidebar-text whitespace-nowrap">Back to Dashboard</span>
+        </button>
+      </div>
+
+      <!-- Workspaces (Allowed Boards) -->
+      <div class="px-3 py-2 flex-1 flex flex-col">
+        <div class="px-3 py-2 flex items-center justify-between">
+          <span class="text-[11px] font-bold text-slate-500 tracking-widest uppercase sidebar-text select-none">Workspaces</span>
+          <i data-lucide="folder-kanban" class="w-4 h-4 text-slate-500 md:hidden block-collapsed"></i>
+        </div>
+        <div id="workspacesList" class="space-y-1 overflow-y-auto max-h-[220px]">
+          <!-- Dynmically loaded workspaces -->
+        </div>
+      </div>
+
+      <!-- Team Members -->
+      <div class="px-3 py-4 border-t border-dark-700/20">
+        <div class="px-3 py-2 flex items-center justify-between">
+          <span class="text-[11px] font-bold text-slate-500 tracking-widest uppercase sidebar-text select-none">Team Members</span>
+          <i data-lucide="users" class="w-4 h-4 text-slate-500 md:hidden block-collapsed"></i>
+        </div>
+        <div id="teamMembersList" class="space-y-2 max-h-[200px] overflow-y-auto">
+          <!-- Dynamically loaded team members -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- User Profile & Logout -->
+    <div class="p-3 border-t border-dark-700/40 bg-dark-950/40 flex flex-col gap-2 shrink-0">
+      <div class="flex items-center gap-3 p-2 rounded-xl bg-white/5 border border-white/5" id="userProfileInfo">
+        <div id="currentUserAvatar" class="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
+          <!-- Initial -->
+        </div>
+        <div class="flex-1 min-w-0 sidebar-text">
+          <h4 id="currentUserName" class="text-sm font-bold text-white truncate">User Name</h4>
+          <span id="currentUserRole" class="text-xs text-brand-400 font-semibold capitalize">User Role</span>
+        </div>
+      </div>
+      <button id="logoutBtn" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-rose-400 hover:text-white hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all text-sm font-medium">
+        <i data-lucide="log-out" class="w-5 h-5 text-rose-400 shrink-0"></i>
+        <span class="sidebar-text whitespace-nowrap">Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==================================================== -->
+  <!-- MAIN WORKSPACE -->
+  <!-- ==================================================== -->
+  <main class="flex-1 flex flex-col h-screen overflow-hidden min-w-0">
+    
+    <!-- Topbar Header -->
+    <header class="h-16 border-b border-dark-700/40 bg-dark-950/20 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-4">
+        <div>
+          <h1 id="boardTitle" class="text-xl font-bold text-white tracking-wide">Board Name</h1>
+          <p id="permInfo" class="text-xs text-slate-400 mt-0.5 flex items-center gap-2">
+            <!-- Permissions tags dynamically inserted -->
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Search / Stats -->
+      <div class="flex items-center gap-3">
+        <div class="relative max-w-xs md:block hidden">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+          <input id="cardSearch" type="text" placeholder="Search tasks..." class="w-64 bg-dark-900/50 border border-dark-700/50 focus:border-brand-500 rounded-xl pl-9 pr-4 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-all">
+        </div>
+        <div class="flex items-center gap-1.5 bg-brand-500/10 border border-brand-500/20 rounded-xl px-3 py-1.5">
+          <i data-lucide="circle-dot" class="w-4 h-4 text-brand-400"></i>
+          <span id="boardStats" class="text-xs font-semibold text-brand-300">0 Tasks</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Board Area -->
+    <div id="boardArea" class="flex-1 p-6 overflow-x-auto flex gap-6 items-start">
+      <!-- Dynamically generated columns: Backlog, In Progress, Review, Done -->
+    </div>
+  </main>
+
+  <!-- ==================================================== -->
+  <!-- SLIDE-OVER CARD DETAILS MODAL -->
+  <!-- ==================================================== -->
+  <div id="cardModal" class="fixed inset-0 z-50 overflow-hidden hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 overflow-hidden">
+      <!-- Background overlay -->
+      <div id="modalOverlay" class="absolute inset-0 bg-slate-950/75 backdrop-blur-sm opacity-0"></div>
+
+      <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+        <!-- Slide-over panel -->
+        <div id="modalPanel" class="pointer-events-auto w-screen max-w-2xl transform translate-x-full">
+          <div class="flex h-full flex-col overflow-y-auto bg-dark-900 border-l border-dark-700/50 shadow-premium">
+            
+            <!-- Modal Header -->
+            <div class="px-6 py-5 border-b border-dark-700/40 bg-dark-950/40 flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-3">
+                <span id="modalCardId" class="text-xs font-mono font-bold px-2.5 py-1 rounded bg-brand-500/10 text-brand-400 border border-brand-500/20">c1</span>
+                <span class="text-sm font-medium text-slate-400">Card Details</span>
+              </div>
+              <button id="closeModalBtn" class="p-1.5 rounded-lg border border-dark-700/40 hover:bg-dark-800 text-slate-400 hover:text-white transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="flex-1 px-6 py-6 space-y-6 overflow-y-auto">
+              
+              <!-- Card Title (Editable) -->
+              <div class="space-y-1.5">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Task Title</label>
+                <input id="modalCardTitle" type="text" class="w-full bg-dark-950/50 border border-dark-700/50 focus:border-brand-500 rounded-xl px-4 py-2.5 text-white font-semibold text-lg focus:outline-none transition-all">
+              </div>
+
+              <!-- Metadata fields grid (Priority, Tag, Assignee, Due Date) -->
+              <div class="grid grid-cols-2 gap-4">
+                
+                <!-- Priority Selector -->
+                <div class="space-y-1.5">
+                  <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Priority</label>
+                  <select id="modalCardPriority" class="w-full bg-dark-950/50 border border-dark-700/50 focus:border-brand-500 rounded-xl px-3 py-2 text-sm text-white focus:outline-none transition-all">
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                  </select>
+                </div>
+
+                <!-- Tag Selector -->
+                <div class="space-y-1.5">
+                  <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tag</label>
+                  <select id="modalCardTag" class="w-full bg-dark-950/50 border border-dark-700/50 focus:border-brand-500 rounded-xl px-3 py-2 text-sm text-white focus:outline-none transition-all">
+                    <option value="Feature">Feature</option>
+                    <option value="Bug">Bug</option>
+                    <option value="Hotfix">Hotfix</option>
+                    <option value="Refactor">Refactor</option>
+                  </select>
+                </div>
+
+                <!-- Assignee Selector -->
+                <div class="space-y-1.5">
+                  <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Assignee</label>
+                  <select id="modalCardAssignee" class="w-full bg-dark-950/50 border border-dark-700/50 focus:border-brand-500 rounded-xl px-3 py-2 text-sm text-white focus:outline-none transition-all">
+                    <!-- Loaded dynamically -->
+                  </select>
+                </div>
+
+                <!-- Due Date Input -->
+                <div class="space-y-1.5">
+                  <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Due Date</label>
+                  <input id="modalCardDueDate" type="date" class="w-full bg-dark-950/50 border border-dark-700/50 focus:border-brand-500 rounded-xl px-3 py-2 text-sm text-white focus:outline-none transition-all">
+                </div>
+
+              </div>
+
+              <!-- Description Editor -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="text" class="w-4 h-4"></i> Description
+                  </label>
+                </div>
+                <textarea id="modalCardDesc" placeholder="Write a detailed description for this task..." rows="4" class="w-full bg-dark-950/50 border border-dark-700/50 focus:border-brand-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-all resize-none"></textarea>
+                <div class="flex justify-end">
+                  <button id="saveDescBtn" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-medium text-xs shadow-lg shadow-brand-500/20 transition-all flex items-center gap-1.5">
+                    <i data-lucide="save" class="w-3.5 h-3.5"></i> Save Description
+                  </button>
+                </div>
+              </div>
+
+              <!-- File Attachments Section -->
+              <div class="space-y-3">
+                <div class="flex items-center justify-between border-b border-dark-700/30 pb-2">
+                  <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="paperclip" class="w-4 h-4"></i> File Attachments
+                  </label>
+                  <div class="relative">
+                    <input type="file" id="modalAttachFileInput" class="hidden">
+                    <button id="modalUploadBtn" class="text-xs font-semibold text-brand-400 hover:text-brand-300 flex items-center gap-1">
+                      <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add File
+                    </button>
+                  </div>
+                </div>
+                <!-- Attachments List -->
+                <div id="modalAttachmentsList" class="space-y-2">
+                  <!-- Loaded dynamically -->
+                </div>
+              </div>
+
+              <!-- Comments Section -->
+              <div class="space-y-4">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 border-b border-dark-700/30 pb-2">
+                  <i data-lucide="message-square" class="w-4 h-4"></i> Discussion & Comments
+                </label>
+                
+                <!-- Comment Input Box -->
+                <div class="flex gap-3">
+                  <div id="commentInputAvatar" class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-white text-xs font-semibold shrink-0">
+                    U
+                  </div>
+                  <div class="flex-1 space-y-2">
+                    <textarea id="modalCommentInput" placeholder="Write a comment..." rows="2" class="w-full bg-dark-950/50 border border-dark-700/50 focus:border-brand-500 rounded-xl px-3 py-2 text-xs text-white focus:outline-none transition-all resize-none"></textarea>
+                    <button id="addCommentBtn" class="px-4 py-2 rounded-xl bg-brand-600/20 hover:bg-brand-600 border border-brand-500/30 text-brand-400 hover:text-white font-semibold text-xs transition-all float-right">
+                      Comment
+                    </button>
+                  </div>
+                </div>
+
+                <div class="clear-both"></div>
+
+                <!-- Comments List -->
+                <div id="modalCommentsList" class="space-y-4 mt-2">
+                  <!-- Dynamically populated comments -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Modal Footer (Quick actions: Delete, Complete, etc.) -->
+            <div class="px-6 py-4 border-t border-dark-700/40 bg-dark-950/40 flex items-center justify-between shrink-0">
+              <button id="modalDeleteCardBtn" class="px-4 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500 border border-rose-500/20 hover:border-transparent text-rose-400 hover:text-white font-medium text-xs transition-all flex items-center gap-1.5">
+                <i data-lucide="trash-2" class="w-4 h-4"></i> Delete Task
+              </button>
+              <span class="text-xs text-slate-500">Auto-saved to LocalStorage</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<div class="wrap">
-  <div class="card head">
-    <h1 id="welcomeMsg">Welcome</h1>
-    <p class="muted" id="permInfo">Permissions:</p>
-  </div>
-
-  <div class="actions card">
-    <button id="addListBtn" class="btn">+ Add List</button>
-    <button id="addCardBtn" class="btn btn-primary">+ Add Card</button>
-  </div>
-
-  <div id="boardArea" class="board"></div>
-</div>
-
-<script src="/js/users.js"></script>
-<script src="/js/boards.js"></script>
+  <script src="/js/users.js"></script>
+  <script src="/js/boards.js"></script>
 </body>
 </html>

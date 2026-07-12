@@ -2,58 +2,216 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="/css/theme.css">
-  <link rel="stylesheet" href="/css/admin-dashboard.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - NeoBoard</title>
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            dark: {
+              950: '#090d16',
+              900: '#0f172a',
+              800: '#1e293b',
+              700: '#334155',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #090d16 75%);
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
 </head>
-<body class="page">
+<body class="text-slate-200 min-h-screen flex flex-col justify-between page">
 
-<div class="topbar">
-  <div class="brand">NeoBoard (Admin)</div>
-  <button id="logoutBtn" class="btn">Logout</button>
-</div>
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 max-w-5xl w-full mx-auto p-6 md:py-12 space-y-6">
+    
+    <!-- Top Nav Header -->
+    <header class="flex items-center justify-between pb-6 border-b border-dark-700/30">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold shadow-lg shadow-brand-500/20">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+        </div>
+        <span class="font-extrabold text-lg tracking-wider text-white">NEO<span class="text-brand-500">BOARD</span> <span class="text-[10px] bg-rose-500/20 text-rose-400 px-2 py-0.5 rounded border border-rose-500/20 select-none">ADMIN</span></span>
+      </div>
+      <button id="logoutBtn" class="px-4 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500 border border-rose-500/20 hover:border-transparent text-rose-400 hover:text-white text-xs font-semibold transition-all flex items-center gap-1.5 shadow-md">
+        <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Logout
+      </button>
+    </header>
 
-<div class="wrap">
-  <div class="card">
-    <h1 id="welcomeMsg">Welcome</h1>
-    <p class="muted" id="loginInfo">Login time:</p>
-  </div>
+    <!-- Welcome Card -->
+    <div class="glass-panel rounded-2xl p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <h1 id="welcomeMsg" class="text-2xl font-extrabold text-white">Welcome Admin</h1>
+        <p id="loginInfo" class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-500"></i> Login time: --:--
+        </p>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="boards.html?boardId=table1" class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold shadow-lg shadow-brand-500/20 transition-all flex items-center gap-1.5">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Open Kanban Board
+        </a>
+      </div>
+    </div>
 
-  <div class="grid">
-    <div class="card">
-      <h2>Users List</h2>
+    <!-- Admin Content Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       
-      <ul id="usersList" class="list">
-        
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>Boards Permissions</h2>
-      <p class="muted">Choose allowed users + actions per board (saved).</p>
-
-      <label class="muted">Select Board:</label>
-      <select id="boardSelect" class="select"></select>
-
-      <div class="miniCard">
-        <h3 class="muted">Allowed Users</h3>
-        <div id="allowedUsersBox"></div>
+      <!-- Users List Card -->
+      <div class="glass-panel rounded-2xl p-6 shadow-xl space-y-4">
+        <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-dark-700/20 pb-3">
+          <i data-lucide="users" class="w-4 h-4 text-brand-400"></i> Users Registry
+        </h2>
+        <ul id="usersList" class="space-y-2">
+          <!-- Dynamically populated list items inside admin-dashboard.js -->
+        </ul>
       </div>
 
-      <div class="miniCard">
-        <h3 class="muted">Permissions</h3>
-        <label><input type="checkbox" id="pAddCard"> Add Card</label><br>
-        <label><input type="checkbox" id="pAddList"> Add List</label><br>
-        <label><input type="checkbox" id="pMoveCard"> Move Card</label><br>
-        <label><input type="checkbox" id="pDeleteCard"> Delete Card</label>
+      <!-- Board Access / Permissions Configuration Card -->
+      <div class="glass-panel rounded-2xl p-6 shadow-xl md:col-span-2 space-y-5">
+        <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-dark-700/20 pb-3">
+          <i data-lucide="shield-check" class="w-4 h-4 text-brand-400"></i> Permissions Manager
+        </h2>
+
+        <!-- Select Board dropdown -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Select Board to Edit</label>
+          <div class="relative">
+            <select id="boardSelect" class="w-full bg-dark-950/60 border border-dark-700/50 focus:border-brand-500 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none transition-all cursor-pointer">
+              <!-- Loaded options dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Allowed Users Checkboxes -->
+          <div class="bg-white/5 border border-white/5 rounded-xl p-4 space-y-3">
+            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider border-b border-dark-700/20 pb-2 flex items-center gap-1.5">
+              <i data-lucide="check-square" class="w-3.5 h-3.5 text-brand-400"></i> Allowed Users
+            </h3>
+            <div id="allowedUsersBox" class="space-y-2 max-h-40 overflow-y-auto pr-2">
+              <!-- Dynamically populated checkbox rows in admin-dashboard.js -->
+            </div>
+          </div>
+
+          <!-- Feature Action Permissions -->
+          <div class="bg-white/5 border border-white/5 rounded-xl p-4 space-y-3">
+            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider border-b border-dark-700/20 pb-2 flex items-center gap-1.5">
+              <i data-lucide="sliders" class="w-3.5 h-3.5 text-brand-400"></i> Action Privileges
+            </h3>
+            <div class="space-y-2.5 text-xs">
+              <label class="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
+                <input type="checkbox" id="pAddCard" class="w-4 h-4 rounded border-dark-700/60 bg-dark-950 text-brand-600 focus:ring-brand-500">
+                <span>Add Cards</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
+                <input type="checkbox" id="pAddList" class="w-4 h-4 rounded border-dark-700/60 bg-dark-950 text-brand-600 focus:ring-brand-500">
+                <span>Add Lists</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
+                <input type="checkbox" id="pMoveCard" class="w-4 h-4 rounded border-dark-700/60 bg-dark-950 text-brand-600 focus:ring-brand-500">
+                <span>Move Cards</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
+                <input type="checkbox" id="pDeleteCard" class="w-4 h-4 rounded border-dark-700/60 bg-dark-950 text-brand-600 focus:ring-brand-500">
+                <span>Delete Cards</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Save Button -->
+        <div class="flex justify-end pt-2 border-t border-dark-700/20">
+          <button id="saveBtn" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shadow-lg shadow-brand-500/20 transition-all flex items-center gap-1.5">
+            <i data-lucide="save" class="w-4 h-4"></i> Save Settings
+          </button>
+        </div>
+
       </div>
 
-      <button id="saveBtn" class="btn btn-primary">Save</button>
     </div>
+
   </div>
-</div>
 
-<script src="/js/users.js"></script>
-<script src="/js/admin-dashboard.js"></script>
+  <!-- Footer -->
+  <footer class="py-6 text-center text-[10px] text-slate-600 border-t border-dark-700/20">
+    NeoBoard Kanban Management System • Admin Dashboard
+  </footer>
+
+  <script src="/js/users.js"></script>
+  <!-- Script bindings inject styling for dynamic checklist items and users list -->
+  <script src="/js/admin-dashboard.js"></script>
+
+  <!-- Injecting a overrides to format dynamic elements in admin-dashboard.js beautifully -->
+  <script>
+    const styleOverride = document.createElement('style');
+    styleOverride.innerHTML = `
+      #usersList li {
+        display: flex !important;
+        align-items: center !important;
+        padding: 0.6rem 0.75rem !important;
+        background: rgba(255,255,255,0.03) !important;
+        border: 1px solid rgba(255,255,255,0.05) !important;
+        border-radius: 0.75rem !important;
+        font-size: 0.75rem !important;
+        font-weight: 500 !important;
+      }
+      #allowedUsersBox div {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        font-size: 0.75rem !important;
+        font-weight: 500 !important;
+      }
+      #allowedUsersBox input[type="checkbox"] {
+        width: 1rem !important;
+        height: 1rem !important;
+        border-radius: 0.25rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        background-color: rgba(9, 13, 22, 0.6) !important;
+        cursor: pointer !important;
+      }
+    `;
+    document.head.appendChild(styleOverride);
+
+    // Initialize Lucide Icons
+    lucide.createIcons();
+  </script>
 </body>
 </html>
